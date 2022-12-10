@@ -4,28 +4,22 @@ kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
 spec:
-  storageClassName: mylocalstorage
+  storageClassName: cloud-ssd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 4Gi
+      storage: 7Gi
 
 
 ---
 # How do we want !
 
-apiVersion: v1
-kind: PersistentVolume
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
-  name: local-storage
-spec:
-  storageClassName: mylocalstorage
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 4Gi
-  hostPath:
-    path: "/mnt/database/mongodb"
-    type: DirectoryOrCreate
+  name: cloud-ssd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
 
